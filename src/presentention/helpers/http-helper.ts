@@ -13,3 +13,7 @@ export const internalError = (): httpResponse => ({
   body: new ServerError()
 
 })
+export const created = (body: any): httpResponse => ({
+  statusCode: 201,
+  body
+})
