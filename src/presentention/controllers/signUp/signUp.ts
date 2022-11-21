@@ -5,7 +5,7 @@ export class SignUpController implements Controller{
   constructor (private readonly emailValidator: EmailValidator, private readonly addAccount: AddAccount){
   }
 
-  handle (httpRequest: httpRequest): httpResponse{
+  async handle (httpRequest: httpRequest): Promise<httpResponse>{
     try {
       const requiredFields = ['name', 'email', 'password', 'passwordConfirmation']
       for (const field of requiredFields){
@@ -21,7 +21,7 @@ export class SignUpController implements Controller{
       if (password !== passwordConfirmation) {
         return badRequest(new InvalidParamError('passwordConfirmation'))
       }
-      const account = this.addAccount.add({ email, name, password })
+      const account = await this.addAccount.add({ email, name, password })
 
       return created({ ...account })
     } catch {
