@@ -5,7 +5,7 @@ import { SignInController } from './login'
 describe('Login Controller', () => {
   interface ISut {
     sut: SignInController
-    emailValidator: EmailValidator
+    emailValidatorStub: EmailValidator
   }
   const makeEmailValidator = (): EmailValidator => {
     class FakeEmailValidator implements EmailValidator{
@@ -20,7 +20,7 @@ describe('Login Controller', () => {
     const fakeEmailValidator = makeEmailValidator()
     return {
       sut: new SignInController(fakeEmailValidator),
-      emailValidator: fakeEmailValidator
+      emailValidatorStub: fakeEmailValidator
     }
   }
   test('should return 400 if email is not provided', async () => {
@@ -51,8 +51,8 @@ describe('Login Controller', () => {
   })
 
   test('should return 400 if email is invalid', async () => {
-    const { sut, emailValidator } = makeSut()
-    jest.spyOn(emailValidator, 'isValid').mockReturnValueOnce(false)
+    const { sut, emailValidatorStub } = makeSut()
+    jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
     const fakeAccount = {
       body: {
         email: 'invalid email',
