@@ -21,6 +21,6 @@ describe('SignUp route', () => {
       email: 'luccazavarize@gmail.com',
       password: '16062002',
       passwordConfirmation: '16062002'
-    }).expect(200))
+    }).expect(201))
   })
 })
