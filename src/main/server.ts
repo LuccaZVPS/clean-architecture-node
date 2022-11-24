@@ -1,5 +1,10 @@
-import app from './config/app'
-
-app.listen(8080, () => {
-  console.log('server ruinning in http://localhost:8080')
+import { MongoHelper } from '../infra/db/mongodb/helpers/mongo-helper'
+import env from './config/env'
+MongoHelper.connect(env.mongoUrl).then(async () => {
+  const app = (await import('./config/app')).default
+  app.listen(env.port, () => {
+    console.log('server ruinning in http://localhost:' + env.port)
+  })
+}).catch((e) => {
+  console.log(e)
 })
