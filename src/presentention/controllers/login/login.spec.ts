@@ -77,4 +77,20 @@ describe('Login Controller', () => {
     expect(response.statusCode).toBe(400)
     expect(response.body).toEqual(new InvalidParamError('email'))
   })
+
+  test('should return 500 if email validator throws', async () => {
+    const { sut, emailValidatorStub } = makeSut()
+    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const fakeAccount = {
+      body: {
+        email: 'valid_email@gmail.com',
+        password: 'valid_password'
+      }
+
+    }
+    const response = await sut.handle(fakeAccount)
+    expect(response.statusCode).toBe(500)
+  })
 })
