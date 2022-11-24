@@ -49,6 +49,19 @@ describe('Login Controller', () => {
     expect(response.statusCode).toBe(400)
     expect(response.body).toEqual(new MissingParamError('password'))
   })
+  test('should call email validator with correct email', async () => {
+    const { sut, emailValidatorStub } = makeSut()
+    const emailValidator = jest.spyOn(emailValidatorStub, 'isValid')
+    const fakeAccount = {
+      body: {
+        email: 'valid_email@gmail.com',
+        password: 'valid_password'
+      }
+
+    }
+    await sut.handle(fakeAccount)
+    expect(emailValidator).toHaveBeenCalledWith(fakeAccount.body.email)
+  })
 
   test('should return 400 if email is invalid', async () => {
     const { sut, emailValidatorStub } = makeSut()
