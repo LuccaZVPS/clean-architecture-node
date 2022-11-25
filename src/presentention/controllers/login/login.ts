@@ -7,14 +7,13 @@ export class SignInController implements Controller{
   constructor (private readonly emailValidator: EmailValidator, private readonly authentication: Authentication){}
   async handle (httpRequest: httpRequest): Promise<httpResponse>{
     try {
-      const { email, password } = httpRequest.body
-      if (!email) {
-        return badRequest(new MissingParamError('email'))
+      const fields = ['email', 'password']
+      for (const field of fields){
+        if (!httpRequest.body[field]) {
+          return badRequest(new MissingParamError(field))
+        }
       }
-      if (!password) {
-        return badRequest(new MissingParamError('password'))
-      }
-      const validEmal = this.emailValidator.isValid(email)
+      const validEmal = this.emailValidator.isValid(httpRequest.body.email)
       if (!validEmal) {
         return badRequest(new InvalidParamError('email'))
       }
