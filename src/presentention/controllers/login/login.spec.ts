@@ -133,6 +133,6 @@ describe('Login Controller', () => {
     }
     const response = await sut.handle(fakeAccount)
     expect(response.statusCode).toBe(401)
-    expect(response.body).toEqual(new UnauthorizedError('Invalid credentials'))
+    expect(response.body).toEqual(new UnauthorizedError())
   })
 })
