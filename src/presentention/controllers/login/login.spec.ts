@@ -1,5 +1,5 @@
 import { Authentication, AuthenticationFields } from '../../../domain/useCases/authentication'
-import { InvalidParamError, MissingParamError } from '../../errors'
+import { InvalidParamError, MissingParamError, UnauthorizedError } from '../../errors'
 import { EmailValidator } from '../signUp/signUp-protocols'
 import { SignInController } from './login'
 
@@ -133,5 +133,6 @@ describe('Login Controller', () => {
     }
     const response = await sut.handle(fakeAccount)
     expect(response.statusCode).toBe(401)
+    expect(response.body).toEqual(new UnauthorizedError('Invalid credentials'))
   })
 })
