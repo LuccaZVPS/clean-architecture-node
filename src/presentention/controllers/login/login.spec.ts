@@ -135,4 +135,20 @@ describe('Login Controller', () => {
     expect(response.statusCode).toBe(401)
     expect(response.body).toEqual(new UnauthorizedError())
   })
+
+  test('should return 500 if auth throws', async () => {
+    const { sut, authenticationStub } = makeSut()
+    jest.spyOn(authenticationStub, 'auth').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const fakeAccount = {
+      body: {
+        email: 'valid_email@gmail.com',
+        password: 'valid_password'
+      }
+
+    }
+    const response = await sut.handle(fakeAccount)
+    expect(response.statusCode).toBe(500)
+  })
 })
