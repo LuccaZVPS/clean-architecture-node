@@ -1,5 +1,5 @@
 import { Authentication } from '../../../domain/useCases/authentication'
-import { InvalidParamError, MissingParamError } from '../../errors'
+import { InvalidParamError, MissingParamError, UnauthorizedError } from '../../errors'
 import { badRequest, internalError, ok, unauthorized } from '../../helpers/http-helper'
 import { Controller, httpRequest, httpResponse } from '../../protocols/index'
 import { EmailValidator } from '../signUp/signUp-protocols'
@@ -19,7 +19,7 @@ export class SignInController implements Controller{
       }
       const token = await this.authentication.auth(httpRequest.body)
       if (!token) {
-        return unauthorized('Invalid credentials')
+        return unauthorized(new UnauthorizedError('Invalid credentials'))
       }
       return ok({ sucess: true })
     } catch {
