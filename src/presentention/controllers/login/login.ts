@@ -21,7 +21,7 @@ export class SignInController implements Controller{
       if (!token) {
         return unauthorized()
       }
-      return ok({ sucess: true })
+      return ok(token)
     } catch {
       return internalError()
     }
