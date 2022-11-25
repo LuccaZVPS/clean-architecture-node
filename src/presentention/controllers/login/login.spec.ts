@@ -121,4 +121,17 @@ describe('Login Controller', () => {
     await sut.handle(fakeAccount)
     expect(auth).toHaveBeenCalledWith(fakeAccount.body)
   })
+  test('should return 401 if invalid credentials are provided', async () => {
+    const { sut, authenticationStub } = makeSut()
+    jest.spyOn(authenticationStub, 'auth').mockReturnValue(new Promise(resolve => resolve(null as unknown as string)))
+    const fakeAccount = {
+      body: {
+        email: 'valid_email@gmail.com',
+        password: 'valid_password'
+      }
+
+    }
+    const response = await sut.handle(fakeAccount)
+    expect(response.statusCode).toBe(401)
+  })
 })
