@@ -1,9 +1,10 @@
+import { Authentication } from '../../../domain/useCases/authentication'
 import { InvalidParamError, MissingParamError } from '../../errors'
 import { badRequest, internalError, ok } from '../../helpers/http-helper'
 import { Controller, httpRequest, httpResponse } from '../../protocols/index'
 import { EmailValidator } from '../signUp/signUp-protocols'
 export class SignInController implements Controller{
-  constructor (private readonly emailValidator: EmailValidator){}
+  constructor (private readonly emailValidator: EmailValidator, private readonly authentication: Authentication){}
   async handle (httpRequest: httpRequest): Promise<httpResponse>{
     try {
       const { email, password } = httpRequest.body
@@ -17,6 +18,7 @@ export class SignInController implements Controller{
       if (!validEmal) {
         return badRequest(new InvalidParamError('email'))
       }
+      await this.authentication.auth(httpRequest.body)
       return ok({ sucess: true })
     } catch {
       return internalError()
