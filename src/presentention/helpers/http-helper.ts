@@ -21,3 +21,7 @@ export const ok = (body: any): httpResponse => ({
   statusCode: 200,
   body
 })
+export const unauthorized = (body: any): httpResponse => ({
+  statusCode: 401,
+  body
+})
